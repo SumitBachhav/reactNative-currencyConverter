@@ -1,7 +1,13 @@
 
 import React, { useState } from 'react';
 import {
+  FlatList,
+  Pressable,
+  SafeAreaView,
+  StatusBar,
   StyleSheet,
+  Text,
+  TextInput,
   View,
 } from 'react-native';
 
@@ -42,7 +48,47 @@ function App(): React.JSX.Element {
     }
   }
   return (
-    <View></View>
+    <>
+      <StatusBar/>
+      <View style = {styles.container}>
+        <View style = {styles.topContainer}>
+          <View style = {styles.rupeesContainer}>
+            <Text style = {styles.rupee}>₹</Text>
+            <TextInput
+            maxLength={14}
+            value={inputValue}
+            clearButtonMode='always'
+            onChangeText={setInputValue}
+            keyboardType='number-pad'
+            placeholder='Enter amount in Rupees'
+            />
+          </View>
+          {resultValue && (
+            <Text style = {styles.resultTxt}>
+              {resultValue}
+            </Text>
+          )}
+        </View>
+        <View style = {styles.bottomContainer}>
+          <FlatList
+          numColumns={3}
+          data = {currencyByRupee}
+          keyExtractor={item => item.name}
+          renderItem={({item}) => (
+            <Pressable
+            style = {[
+              styles.button, 
+              targetCurrency ===item.name && styles.selected
+            ]}
+            onPress={() => buttonPressed(item)}
+            >
+              <CurrencyBtn {...item}/>
+            </Pressable>
+          )}
+          />
+        </View>
+      </View>
+    </>
   );
 }
 
@@ -117,9 +163,8 @@ export default App;
 
 - using flatlist instead of scrollView
 - importing snackBar
-- 
-
-
-
+- flatList needs data, keyExtractor and something to render which is renderItem
+- renderItem should be used with () => () , means without return keyword
+- safeArea is not needed
 
 */
